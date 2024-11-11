@@ -72,6 +72,7 @@ def _construct_model(
     Figures out how to call `_get_model` depending on inputs. Used by
     `get_and_fit_model`.
     """
+    print('_construct_model()')
     if task_feature is None:
         if len(Xs) == 1:
             # Use single output, single task GP
@@ -184,6 +185,7 @@ def get_and_fit_model(
         A fitted GPyTorchModel.
     """
 
+    print('get_and_fit_model()')
     if len(fidelity_features) > 0 and len(task_features) > 0:
         raise NotImplementedError(
             "Currently do not support MF-GP models with task_features!"
@@ -221,8 +223,10 @@ def get_and_fit_model(
 
     model.to(Xs[0])
     if state_dict is not None:
+        print('get_and_fit_model() from state')
         model.load_state_dict(state_dict)
     if state_dict is None or refit_model:
+        print('get_and_fit_model() refit')
         # TODO: Add bounds for optimization stability - requires revamp upstream
         bounds = {}
         if use_loocv_pseudo_likelihood:
@@ -286,6 +290,7 @@ def get_acqf(
         `AcquisitionFunction` instance that corresponds to `acquisition_function_name`.
     """
 
+    print('get_acqf()')
     def decorator(empty_acqf_getter: Callable[[], None]) -> TAcqfConstructor:
         # `wraps` allows the function to keep its original, module-level name, enabling
         # serialization via `callable_to_reference`. `empty_acqf_getter` is otherwise
@@ -391,6 +396,9 @@ def _get_acquisition_func(
     Returns:
         The instantiated acquisition function.
     """
+
+    print('_get_acquisition_func')
+
     if acquisition_function_name not in [
         "qSR",
         "qEI",
@@ -498,6 +506,13 @@ def scipy_optimizer(
           conditional on having observed candidates `0,1,...,i-1`.
     """
 
+    print('scipy_optimizer')
+    print('num restarts: ', num_restarts)
+    print('raw_samples: ', raw_samples)
+    print('options', options)
+    print('n', n)
+    print('bounds', bounds)
+
     sequential = not joint_optimization
     optimize_acqf_options: Dict[str, Union[bool, float, int, str]] = {
         "batch_limit": 5,
@@ -517,6 +532,7 @@ def scipy_optimizer(
         fixed_features=fixed_features,
         sequential=sequential,
         post_processing_func=rounding_func,
+        timeout_sec=1.0
     )
     return X, expected_acquisition_value
 
@@ -711,6 +727,9 @@ def _get_model(
     Returns:
         A GPyTorchModel (unfitted).
     """
+
+    print('_get_model')
+
     Yvar = Yvar.clamp_min(MIN_OBSERVED_NOISE_LEVEL)
     is_nan = torch.isnan(Yvar)
     any_nan_Yvar = torch.any(is_nan)

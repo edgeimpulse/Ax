@@ -385,6 +385,7 @@ class BotorchModel(TorchModel):
         # pyre-fixme[53]: Captured variable `optimizer_options` is not annotated.
         # pyre-fixme[53]: Captured variable `outcome_constraints` is not annotated.
         def make_and_optimize_acqf(override_qmc: bool = False) -> Tuple[Tensor, Tensor]:
+            print('botorch.make_and_optimize_acqf()')
             add_kwargs = {"qmc": False} if override_qmc else {}
             acquisition_function = self.acqf_constructor(
                 model=model,
@@ -399,6 +400,12 @@ class BotorchModel(TorchModel):
                 AcquisitionFunction, acquisition_function
             )
             # pyre-ignore: [28]
+            print('botorch.make_and_optimize_acqf() acqf_optimizer')
+            print('n: ', n)
+            print('bounds: ', bounds_)
+            print('optimizer_options: ', optimizer_options)
+            print('acqf_optimizer: ', self.acqf_optimizer)
+
             candidates, expected_acquisition_value = self.acqf_optimizer(
                 acq_function=checked_cast(AcquisitionFunction, acquisition_function),
                 bounds=bounds_,
