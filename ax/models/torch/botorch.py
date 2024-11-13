@@ -405,6 +405,10 @@ class BotorchModel(TorchModel):
             print('bounds: ', bounds_)
             print('optimizer_options: ', optimizer_options)
             print('acqf_optimizer: ', self.acqf_optimizer)
+            print('outcome_constraints:', torch_opt_config.outcome_constraints)
+            print('inequality_constraints: ', torch_opt_config.linear_constraints)
+            print('rounding_func: ', botorch_rounding_func)
+            print('optimizer_options: ', optimizer_options)
 
             candidates, expected_acquisition_value = self.acqf_optimizer(
                 acq_function=checked_cast(AcquisitionFunction, acquisition_function),
