@@ -532,7 +532,7 @@ def scipy_optimizer(
         fixed_features=fixed_features,
         sequential=sequential,
         post_processing_func=rounding_func,
-        timeout_sec=10
+        timeout_sec=1
     )
     return X, expected_acquisition_value
 
