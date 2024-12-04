@@ -747,7 +747,6 @@ class GenerationStep(GenerationNode, SortableBase):
         arms_by_signature_for_deduplication: Optional[Dict[str, Arm]] = None,
         **model_gen_kwargs: Any,
     ) -> GeneratorRun:
-        print('gen()')
         gr = super().gen(
             n=n,
             pending_observations=pending_observations,
@@ -756,7 +755,6 @@ class GenerationStep(GenerationNode, SortableBase):
             **model_gen_kwargs,
         )
         gr._generation_step_index = self.index
-        print('gen() complete')
         return gr
 
     def __eq__(self, other: Base) -> bool:

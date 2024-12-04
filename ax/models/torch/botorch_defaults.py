@@ -185,7 +185,6 @@ def get_and_fit_model(
         A fitted GPyTorchModel.
     """
 
-    print('get_and_fit_model()')
     if len(fidelity_features) > 0 and len(task_features) > 0:
         raise NotImplementedError(
             "Currently do not support MF-GP models with task_features!"
@@ -223,10 +222,9 @@ def get_and_fit_model(
 
     model.to(Xs[0])
     if state_dict is not None:
-        print('get_and_fit_model() from state')
         model.load_state_dict(state_dict)
     if state_dict is None or refit_model:
-        print('get_and_fit_model() refit')
+        print('Refitting guassian model...')
         # TODO: Add bounds for optimization stability - requires revamp upstream
         bounds = {}
         if use_loocv_pseudo_likelihood:
@@ -290,7 +288,6 @@ def get_acqf(
         `AcquisitionFunction` instance that corresponds to `acquisition_function_name`.
     """
 
-    print('get_acqf()')
     def decorator(empty_acqf_getter: Callable[[], None]) -> TAcqfConstructor:
         # `wraps` allows the function to keep its original, module-level name, enabling
         # serialization via `callable_to_reference`. `empty_acqf_getter` is otherwise
@@ -396,9 +393,6 @@ def _get_acquisition_func(
     Returns:
         The instantiated acquisition function.
     """
-
-    print('_get_acquisition_func')
-
     if acquisition_function_name not in [
         "qSR",
         "qEI",
@@ -505,13 +499,6 @@ def scipy_optimizer(
           values, where `i`-th element is the expected acquisition value
           conditional on having observed candidates `0,1,...,i-1`.
     """
-
-    print('scipy_optimizer')
-    print('num restarts: ', num_restarts)
-    print('raw_samples: ', raw_samples)
-    print('options', options)
-    print('n', n)
-    print('bounds', bounds)
 
     sequential = not joint_optimization
     optimize_acqf_options: Dict[str, Union[bool, float, int, str]] = {
@@ -727,9 +714,6 @@ def _get_model(
     Returns:
         A GPyTorchModel (unfitted).
     """
-
-    print('_get_model')
-
     Yvar = Yvar.clamp_min(MIN_OBSERVED_NOISE_LEVEL)
     is_nan = torch.isnan(Yvar)
     any_nan_Yvar = torch.any(is_nan)
