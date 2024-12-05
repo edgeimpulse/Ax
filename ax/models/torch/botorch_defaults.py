@@ -72,7 +72,6 @@ def _construct_model(
     Figures out how to call `_get_model` depending on inputs. Used by
     `get_and_fit_model`.
     """
-    print('_construct_model()')
     if task_feature is None:
         if len(Xs) == 1:
             # Use single output, single task GP
