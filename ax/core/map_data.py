@@ -11,7 +11,8 @@ from logging import Logger
 from typing import Any, Dict, Generic, Iterable, List, Optional, Sequence, Type, TypeVar
 
 import numpy as np
-
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 from ax.core.data import Data
 from ax.core.types import TMapTrialEvaluation
